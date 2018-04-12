@@ -55,31 +55,31 @@ $(document).ready(function(){
     
             //Conversions for the table
                 //Convert to HH:MM
-                firstTimeConverted = moment(firstTrainTime, "hh:mm"); //Converts the firsTimeCover object into string
-                
+                firstTimeConverted = moment(firstTrainTime, "HH:mm"); //Converts the firsTimeCover object into string
+                console.log(firstTimeConverted.toString());
                 
                 
                 // Current Time
                 var currentTime = moment();
-                console.log(currentTime); 
-                timeDifference = moment().diff(moment(firstTimeConverted), "minutes");//.diff takes in two parameters
-                
+                timeDifference = firstTimeConverted.diff(currentTime, "minutes");//.diff takes in two parameters
+
                 // Time apart (remainder)
-                tRemainder = timeDifference % freq;
+                tRemainder = timeDifference % freq;// giving the remainder
     
                 // Minute Until Train
-                tMinutesTillTrain = freq - tRemainder;
+                tMinutesTillTrain = freq - tRemainder;// giving how many minutes away referencing line 77
                 
                 // Next Train
-                nextTrain = moment().add(tMinutesTillTrain, "minutes");
-                nextTrainFormat = moment(nextTrain).format('hh:mm');
+                var nextTrainMomentObj = currentTime.add(tMinutesTillTrain, "minutes");
+                // console.log(nextTrain.toString());
+                nextTrainFormat = nextTrainMomentObj.format('hh:mm A');
                 console.log(nextTrainFormat); 
             
             //pushing the data with time converstions onto the table
             database.ref('/trainschedule').push({
                 trainName: trainName,
                 destination: dest,
-                arrival: nextTrainFormat, 
+                arrival: nextTrainMomentObj.toString(), // store this with all the stuff in moment
                 minutesAway: tMinutesTillTrain,
                 frequency: freq // in line 23 the freq variable is created and 48 the value is stored into the variable 
             }); 	
@@ -93,9 +93,12 @@ $(document).ready(function(){
                         arrivalData = snap.val().arrival;
                         freqData = snap.val().frequency;
                         minutesAwayData = snap.val().minutesAway;
+
+                        // date formatitng
+                        var arrival = moment(arrivalData).format('hh:mm A');
     
                         //Data array
-                        var dataArray = [trainNameData, destData, freqData, arrivalData, minutesAwayData];//array of data variables
+                        var dataArray = [trainNameData, destData, freqData, arrival, minutesAwayData];//array of data variables
                         var newTr = $('<tr>'); //grabbing the tablerow div and storing as variable 
                         for(var i = 0; i< dataArray.length; i++){ //forloop through the array of data variables
                             var newTd = $('<td>');// grabbing the tabledata div and storing as a variable
