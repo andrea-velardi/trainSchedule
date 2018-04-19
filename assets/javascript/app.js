@@ -79,7 +79,7 @@ $(document).ready(function(){
             database.ref('/trainschedule').push({
                 trainName: trainName,
                 destination: dest,
-                arrival: nextTrainMomentObj.toString(), // store this with all the stuff in moment
+                arrival: nextTrainMomentObj.toISOString(), // store in the database in a standardized format (ISO)
                 minutesAway: tMinutesTillTrain,
                 frequency: freq // in line 23 the freq variable is created and 48 the value is stored into the variable 
             }); 	
@@ -88,14 +88,14 @@ $(document).ready(function(){
             database.ref('/trainschedule').on('child_added',function(snap){ //using .ref to reference the /trainschedule and then taking snapshot of the data
                         
                         //Testing
-                        trainNameData = snap.val().trainName;//taking spashot of the value inputted for trainNAme 
+                        trainNameData = snap.val().trainName; //taking spashot of the value inputted for trainNAme 
                         destData = snap.val().destination;
                         arrivalData = snap.val().arrival;
                         freqData = snap.val().frequency;
                         minutesAwayData = snap.val().minutesAway;
 
                         // date formatitng
-                        var arrival = moment(arrivalData).format('hh:mm A');
+                        var arrival = moment(arrivalData).format('hh:mm A'); // moment can automatically parse (no second argument) the ISO format from line 82
     
                         //Data array
                         var dataArray = [trainNameData, destData, freqData, arrival, minutesAwayData];//array of data variables
