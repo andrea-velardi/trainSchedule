@@ -68,7 +68,15 @@ $(document).ready(function(){
                 tMinutesTillTrain = freq - tRemainder;// giving how many minutes away referencing line 77
                 
                 // Next Train
-                var nextTrainMomentObj = currentTime.add(tMinutesTillTrain, "minutes");
+                if (timeDifference > 0) { // if difference is greater than 0 it's in the past
+                    // if the trip is in the past handle computing the next train
+                    var nextTrainMomentObj = currentTime.add(tMinutesTillTrain, "minutes");
+                } 
+                else {
+                    // if the trip is in the future just assume that's the next arrival :)
+                    var nextTrainMomentObj = firstTimeConverted;
+                }
+
                 // console.log(nextTrain.toString());
                 nextTrainFormat = nextTrainMomentObj.format('hh:mm A');
                 console.log(nextTrainFormat); 
