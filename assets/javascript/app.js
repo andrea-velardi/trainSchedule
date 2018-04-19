@@ -58,19 +58,26 @@ $(document).ready(function(){
                 firstTimeConverted = moment(firstTrainTime, "HH:mm"); //Converts the firsTimeCover object into string
                 console.log(firstTimeConverted.toString());
                 
-                
                 // Current Time
                 var currentTime = moment();
-                timeDifference = firstTimeConverted.diff(currentTime, "minutes");//.diff takes in two parameters
-
-                // Time apart (remainder)
-                tRemainder = timeDifference % freq;// giving the remainder
-    
-                // Minute Until Train
-                tMinutesTillTrain = freq - tRemainder;// giving how many minutes away referencing line 77
-                
+                timeDifference = currentTime.diff(firstTimeConverted, "minutes");//.diff takes in two parameters
                 // Next Train
-                var nextTrainMomentObj = currentTime.add(tMinutesTillTrain, "minutes");
+                if (timeDifference > 0) { // if difference is greater than 0 it's in the past
+                    // if the trip is in the past handle computing the next train
+
+                    // Time apart (remainder)
+                    tRemainder = timeDifference % freq;// giving the remainder
+        
+                    // Minute Until Train
+                    tMinutesTillTrain = freq - tRemainder;// giving how many minutes away referencing line 77
+
+                    var nextTrainMomentObj = currentTime.add(tMinutesTillTrain, "minutes");
+                } 
+                else {
+                    // if the trip is in the future just assume that's the next arrival :)
+                    var nextTrainMomentObj = firstTimeConverted;
+                }
+
                 // console.log(nextTrain.toString());
                 nextTrainFormat = nextTrainMomentObj.format('hh:mm A');
                 console.log(nextTrainFormat); 
