@@ -58,11 +58,9 @@ $(document).ready(function(){
                 firstTimeConverted = moment(firstTrainTime, "HH:mm"); //Converts the firsTimeCover object into string
                 console.log(firstTimeConverted.toString());
                 
-                
                 // Current Time
                 var currentTime = moment();
-                timeDifference = firstTimeConverted.diff(currentTime, "minutes");//.diff takes in two parameters
-
+                timeDifference = currentTime.diff(firstTimeConverted, "minutes");//.diff takes in two parameters
                 // Time apart (remainder)
                 tRemainder = timeDifference % freq;// giving the remainder
     
